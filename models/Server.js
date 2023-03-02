@@ -1,3 +1,4 @@
+/* Importing the modules that are needed for the server to work. */
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
@@ -5,20 +6,24 @@ const hpp = require('hpp');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
-
-const { authRouter } = require('../routes/auth.routes');
-const { cartRouter } = require('../routes/cart.routes');
-const { categoriesRouter } = require('../routes/categories.routes');
+const { restaurantRouter } = require('../routes/restaurant.routes');
+const { mealRouter } = require('../routes/meal.routes');
 const { db } = require('../database/db');
-const { productRouter } = require('../routes/product.routes');
-const { usersRouter } = require('../routes/user.routes');
+const { orderRouter } = require('../routes/order.routes');
+const { userRouter } = require('../routes/user.routes');
 const AppError = require('../utils/appError');
 const globalErrorHandler = require('../controllers/error.controller');
 const initModel = require('./init.model');
 
 //1. CREAMOS UNA CLASE
 
+/* The constructor function is used to define the application, the port, the limiter, the paths, the
+database, the middlewares and the routes. */
 class Server {
+ /**
+  * The constructor function is used to define the application, the port, the limiter, the paths, the
+  * database, the middlewares and the routes.
+  */
   constructor() {
     //DEFINIMOS LA APLICACIÓN DE EXPRESS Y SE LA ASIGNAMOS A LA PROPIEDAD APP
     this.app = express();
@@ -29,13 +34,14 @@ class Server {
       windowMs: 60 * 60 * 1000,
       message: 'Too many request from this IP, please try again in an hour!',
     });
-    //DEFINIMOS LOS PATHS DE NUESTRA APLICACIÓN
+ 
+   /* A constant that is used to define the paths of the application. */
     this.paths = {
       auth: '/api/v1/auth',
-      cart: '/api/v1/cart',
-      categories: '/api/v1/categories',
-      products: '/api/v1/products',
-      user: '/api/v1/user',
+      user: '/api/v1/users',
+      restaurant: '/api/v1/restaurants',
+      meal: '/api/v1/meals',
+      order: '/api/v1/orders',
     };
 
     //LLAMO EL METODO DE CONEXION A LA BASE DE DATOS
@@ -48,7 +54,10 @@ class Server {
     this.routes();
   }
 
-  //MIDDLEWARES
+  
+  /**
+   * This function is used to set up middlewares for the application.
+   */
   middlewares() {
     this.app.use(helmet());
 
@@ -60,24 +69,16 @@ class Server {
       this.app.use(morgan('dev'));
     }
     this.app.use('/api/v1', this.limiter);
-    //UTILIZAMOS LAS CORS PARA PERMITIR ACCESSO A LA API
     this.app.use(cors());
-    //UTILIZAMOS EXPRESS.JSON PARA PARSEAR EL BODY DE LA REQUEST
     this.app.use(express.json());
   }
 
   //RUTAS
   routes() {
-    //utilizar las rutas de autenticacion
-    this.app.use(this.paths.auth, authRouter);
-    //utilizar las rutas de cart
-    this.app.use(this.paths.cart, cartRouter);
-    //utilizar las rutas de categorias
-    this.app.use(this.paths.categories, categoriesRouter);
-    //utilizar las rutas de productos
-    this.app.use(this.paths.products, productRouter);
-    //utilizar las rutas de usuarios
-    this.app.use(this.paths.user, usersRouter);
+    this.app.use(this.paths.user, userRouter);
+    this.app.use(this.paths.meal, mealRouter);
+    this.app.use(this.paths.order, orderRouter);
+    this.app.use(this.paths.restaurant, restaurantRouter);
 
     this.app.all('*', (req, res, next) => {
       return next(

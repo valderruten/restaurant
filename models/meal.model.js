@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { db } = require('../database/db');
 
-const User = db.define('meals', {
+const Meal = db.define('meals', {
     id: {
         primaryKey: true,
         autoIncrement: true,
@@ -22,10 +22,10 @@ const User = db.define('meals', {
     },
     
     status: {
-        type: DataTypes.ENUM('available','disabled'),
-        allowNull: false,
+        type: DataTypes.STRING,
+        allowNull: false ,
         defaultValue: "available"
     }
 })
 
-module.exports = User
+module.exports = Meal
