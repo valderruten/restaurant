@@ -8,9 +8,10 @@ const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
 const { restaurantRouter } = require('../routes/restaurant.routes');
 const { mealRouter } = require('../routes/meal.routes');
-const { db } = require('../database/db');
 const { orderRouter } = require('../routes/order.routes');
 const { userRouter } = require('../routes/user.routes');
+const { db } = require('../database/db');
+
 const AppError = require('../utils/appError');
 const globalErrorHandler = require('../controllers/error.controller');
 const initModel = require('./init.model');
@@ -20,10 +21,10 @@ const initModel = require('./init.model');
 /* The constructor function is used to define the application, the port, the limiter, the paths, the
 database, the middlewares and the routes. */
 class Server {
- /**
-  * The constructor function is used to define the application, the port, the limiter, the paths, the
-  * database, the middlewares and the routes.
-  */
+  /**
+   * The constructor function is used to define the application, the port, the limiter, the paths, the
+   * database, the middlewares and the routes.
+   */
   constructor() {
     //DEFINIMOS LA APLICACIÓN DE EXPRESS Y SE LA ASIGNAMOS A LA PROPIEDAD APP
     this.app = express();
@@ -34,8 +35,8 @@ class Server {
       windowMs: 60 * 60 * 1000,
       message: 'Too many request from this IP, please try again in an hour!',
     });
- 
-   /* A constant that is used to define the paths of the application. */
+
+    /* A constant that is used to define the paths of the application. */
     this.paths = {
       auth: '/api/v1/auth',
       user: '/api/v1/users',
@@ -44,17 +45,19 @@ class Server {
       order: '/api/v1/orders',
     };
 
-    //LLAMO EL METODO DE CONEXION A LA BASE DE DATOS
+   
+  /* Connecting to the database. */
     this.database();
 
-    //INVOCAMOS EL METODO MIDDLEWARES
+    
+    /* Setting up the middlewares for the application. */
     this.middlewares();
 
-    //INVOCAMOS EL METODO ROUTES
+    
+   /* Calling the routes function. */
     this.routes();
   }
 
-  
   /**
    * This function is used to set up middlewares for the application.
    */
@@ -74,6 +77,9 @@ class Server {
   }
 
   //RUTAS
+ /**
+  * This function is used to define the routes for the application
+  */
   routes() {
     this.app.use(this.paths.user, userRouter);
     this.app.use(this.paths.meal, mealRouter);

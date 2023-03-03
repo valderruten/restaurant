@@ -17,7 +17,7 @@ const Order = db.define('orders', {
         allowNull: false
     },
     totalPrice: {
-        type: DataTypes.NUMBER(10,2),
+        type: DataTypes.DECIMAL,
         allowNull: false
     },
     
