@@ -3,24 +3,15 @@ const catchAsync = require('../utils/catchAsync');
 const bcrypt = require('bcryptjs');
 const generateJWT = require('../utils/jwt');
 const AppError = require('../utils/appError');
-//const { ref, uploadBytes } = require('firebase/storage');
-//const { storage } = require('../utils/firebase');
 
 /* A function that creates a user. */
 exports.createUser = catchAsync(async (req, res, next) => {
-  const { name, email, password  } = req.body;
-
-//  const imgRef = ref(storage, `users/${Date.now()}-${req.file.originalname}`);
- // const imgUploaded = await uploadBytes(imgRef, req.file.buffer);
-
-  //console.log(imgUploaded);
+  const { name, email, password } = req.body;
 
   const user = new User({
     name,
     email,
     password,
-   
-    //profileImageUrl: imgUploaded.metadata.fullPath,
   });
 
   const salt = await bcrypt.genSalt(10);
@@ -37,7 +28,6 @@ exports.createUser = catchAsync(async (req, res, next) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      
     },
   });
 });
@@ -49,7 +39,7 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({
     where: {
       email: email.toLowerCase(),
-      status: true,
+      status: 'available',
     },
   });
 
@@ -70,7 +60,6 @@ exports.login = catchAsync(async (req, res, next) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      
     },
   });
 });
@@ -83,7 +72,7 @@ exports.renewToken = catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({
     where: {
-      status: true,
+      status: 'available',
       id,
     },
   });
@@ -95,7 +84,6 @@ exports.renewToken = catchAsync(async (req, res, next) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      
     },
   });
 });

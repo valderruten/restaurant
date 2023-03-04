@@ -1,6 +1,11 @@
 const { Router } = require('express');
 const router = Router();
-const { signup, login, updateUser, deleteUser } = require('../controllers/user.controller');
+const {
+  signup,
+  login,
+  updateUser,
+  deleteUser,
+} = require('../controllers/user.controller');
 const { sign } = require('jsonwebtoken');
 
 const {
@@ -35,8 +40,7 @@ router.patch(
   protectAccountOwner,
   updateUser
 );
-router.delete('/:id', 
-validateFields, protectAccountOwner, deleteUser);
+router.delete('/:id', validateFields, protectAccountOwner, deleteUser);
 module.exports = {
   userRouter: router,
 };

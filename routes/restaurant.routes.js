@@ -15,7 +15,9 @@ const {
   createReviewValidation,
   createRestaurantValidation,
 } = require('../middlewares/validations.middleware');
-const { validateExistReview } = require('../middlewares/validExistReview.middleware');
+const {
+  validateExistReview,
+} = require('../middlewares/validExistReview.middleware');
 const router = Router();
 
 router.use(protect);
@@ -40,7 +42,7 @@ router.patch(
   validateFields,
   validExistRestaurantId,
   validateExistReview,
-  
+
   updateReview
 );
 

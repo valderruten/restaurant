@@ -16,8 +16,6 @@ const AppError = require('../utils/appError');
 const globalErrorHandler = require('../controllers/error.controller');
 const initModel = require('./init.model');
 
-//1. CREAMOS UNA CLASE
-
 /* The constructor function is used to define the application, the port, the limiter, the paths, the
 database, the middlewares and the routes. */
 class Server {
@@ -45,16 +43,13 @@ class Server {
       order: '/api/v1/orders',
     };
 
-   
-  /* Connecting to the database. */
+    /* Connecting to the database. */
     this.database();
 
-    
     /* Setting up the middlewares for the application. */
     this.middlewares();
 
-    
-   /* Calling the routes function. */
+    /* Calling the routes function. */
     this.routes();
   }
 
@@ -77,9 +72,9 @@ class Server {
   }
 
   //RUTAS
- /**
-  * This function is used to define the routes for the application
-  */
+  /**
+   * This function is used to define the routes for the application
+   */
   routes() {
     this.app.use(this.paths.user, userRouter);
     this.app.use(this.paths.meal, mealRouter);
