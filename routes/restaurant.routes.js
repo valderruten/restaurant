@@ -4,6 +4,7 @@ const {
   createRestaurant,
   findRestaurants,
   updateReview,
+  deleteReview,
 } = require('../controllers/restaurant.controller');
 const {
   validExistRestaurant,
@@ -42,8 +43,15 @@ router.patch(
   validateFields,
   validExistRestaurantId,
   validateExistReview,
-
   updateReview
+);
+router.delete(
+  '/reviews/:restaurantId/:id',
+  createReviewValidation,
+  validateFields,
+  validExistRestaurantId,
+  validateExistReview,
+  deleteReview
 );
 
 module.exports = {

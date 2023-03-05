@@ -27,9 +27,9 @@ const Review = db.define('reviews', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.BOOLEAN,
+    type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: true,
+    
   },
 });
 

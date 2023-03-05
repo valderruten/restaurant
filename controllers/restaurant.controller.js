@@ -56,3 +56,13 @@ exports.updateReview = catchAsync(async (req, res, next) => {
     message: 'The review has been updated',
   });
 });
+exports.deleteReview = catchAsync(async (req, res, next) => {
+  const { review } = req;
+
+  await review.delete({ status: 'disabled' });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Review deleted successfully',
+  });
+});
